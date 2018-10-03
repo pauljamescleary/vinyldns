@@ -266,7 +266,6 @@ lazy val dynamodb = (project in file("modules/dynamodb"))
   .settings(sharedSettings)
   .settings(headerSettings(IntegrationTest))
   .settings(inConfig(IntegrationTest)(scalafmtConfigSettings))
-  .settings(name := "dynamodb")
   .settings(corePublishSettings)
   .settings(testSettings)
   .settings(Defaults.itSettings)
@@ -277,6 +276,7 @@ lazy val dynamodb = (project in file("modules/dynamodb"))
     parallelExecution in Test := true,
     parallelExecution in IntegrationTest := true
   ).dependsOn(core % "compile->compile;test->test")
+  .settings(name := "dynamodb")
 
 lazy val mysql = (project in file("modules/mysql"))
   .enablePlugins(DockerComposePlugin, AutomateHeaderPlugin)
@@ -284,7 +284,6 @@ lazy val mysql = (project in file("modules/mysql"))
   .settings(sharedSettings)
   .settings(headerSettings(IntegrationTest))
   .settings(inConfig(IntegrationTest)(scalafmtConfigSettings))
-  .settings(name := "mysql")
   .settings(corePublishSettings)
   .settings(testSettings)
   .settings(Defaults.itSettings)
@@ -293,6 +292,7 @@ lazy val mysql = (project in file("modules/mysql"))
   .settings(
     organization := "io.vinyldns",
   ).dependsOn(core % "compile->compile;test->test")
+  .settings(name := "mysql")
 
 lazy val sqs = (project in file("modules/sqs"))
   .enablePlugins(DockerComposePlugin, AutomateHeaderPlugin)
@@ -300,7 +300,6 @@ lazy val sqs = (project in file("modules/sqs"))
   .settings(sharedSettings)
   .settings(headerSettings(IntegrationTest))
   .settings(inConfig(IntegrationTest)(scalafmtConfigSettings))
-  .settings(name := "sqs")
   .settings(corePublishSettings)
   .settings(testSettings)
   .settings(Defaults.itSettings)
@@ -309,6 +308,7 @@ lazy val sqs = (project in file("modules/sqs"))
   .settings(
     organization := "io.vinyldns",
   ).dependsOn(core % "compile->compile;test->test")
+  .settings(name := "sqs")
 
 val preparePortal = TaskKey[Unit]("preparePortal", "Runs NPM to prepare portal for start")
 val checkJsHeaders = TaskKey[Unit]("checkJsHeaders", "Runs script to check for APL 2.0 license headers")
@@ -485,7 +485,7 @@ addCommandAlias("verify", "; project root; killDocker; " +
   "project sqs; dockerComposeUp;" +
   "project root; coverage; " +
   "all core/test dynamodb/test mysql/test api/test dynamodb/it:test mysql/it:test api/it:test portal/test " +
-  "sqs/test sqs:it:test; " +
+  "sqs/test sqs/it:test; " +
   "project root; coverageReport; coverageAggregate; killDocker"
 )
 
