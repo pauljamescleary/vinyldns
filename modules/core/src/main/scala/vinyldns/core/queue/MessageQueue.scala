@@ -22,12 +22,9 @@ import vinyldns.core.domain.ZoneCommand
 import scala.concurrent.duration.FiniteDuration
 
 // $COVERAGE-OFF$
-
-// Message handle is implementation specific.  For example, in SQS, this may be the `Message` itself
-trait MessageHandle
-
-// Represents a command encoded in a message on a queue
-final case class CommandMessage(handle: MessageHandle, command: ZoneCommand)
+trait CommandMessage {
+  def command: ZoneCommand
+}
 
 // need to encode the possibility of one or more commands failing to send
 final case class SendBatchResult(
@@ -60,7 +57,7 @@ trait MessageQueue {
   def changeMessageTimeout(message: CommandMessage, duration: FiniteDuration): IO[Unit]
 
   // we need to track which messages failed and report that back to the caller
-  def send[A <: ZoneCommand](messages: NonEmptyList[A]): IO[SendBatchResult]
+  def sendBatch[A <: ZoneCommand](messages: NonEmptyList[A]): IO[SendBatchResult]
 
   // sends a single message, exceptions will be raised via IO
   def send[A <: ZoneCommand](command: A): IO[Unit]
